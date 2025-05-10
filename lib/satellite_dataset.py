@@ -13,16 +13,20 @@ class SatelliteDataset(Dataset):
         self.db = self._build_db()
 
     def _build_db(self) -> list:
-        print("[INFO] Building dataset...")
+        print(f"[INFO] Building dataset from {self.dataset_path} ...")
         db = []
-        for filename in tqdm(os.listdir(self.source_path)):
-            if filename.endswith(('.jpg', '.png', '.jpeg')):
-                item = {
-                    'source': os.path.join(self.source_path, filename),
-                    'groundtruth': os.path.join(self.groundtruth_path, filename)
-                }
-            db.append(item)
-        return db
+        try:
+            for filename in tqdm(os.listdir(self.source_path)):
+                if filename.endswith(('.jpg', '.png', '.jpeg')):
+                    item = {
+                        'source': os.path.join(self.source_path, filename),
+                        'groundtruth': os.path.join(self.groundtruth_path, filename)
+                    }
+                db.append(item)
+            return db
+        except:
+            print(f"[WARNING] No dataset has been found in {self.dataset_path}")
+            return db
 
 
     def __getitem__(self, index):
@@ -43,9 +47,9 @@ class SatelliteDataset(Dataset):
     def __len__(self) -> int:
         return len(self.db)
     
-if __name__ == "__main__":
-    dataset = SatelliteDataset("datasets/maps/val")
-    src, gt = dataset[0]
-    print(f"Source image shape: {src.shape}")
-    print(f"Groundtruth image shape: {gt.shape}")
-    print(f"Dataset length: {len(dataset)}")
+# if __name__ == "__main__":
+#     dataset = SatelliteDataset("datasets/maps/val")
+#     src, gt = dataset[0]
+#     print(f"Source image shape: {src.shape}")
+#     print(f"Groundtruth image shape: {gt.shape}")
+#     print(f"Dataset length: {len(dataset)}")

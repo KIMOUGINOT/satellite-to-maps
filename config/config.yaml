@@ -1,0 +1,3 @@
+data:
+  dataset: datasets/maps
+  image_size: [256,256]
