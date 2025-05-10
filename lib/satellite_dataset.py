@@ -1,5 +1,4 @@
 from torch.utils.data import Dataset
-import numpy as np
 import os
 from tqdm import tqdm
 import cv2
@@ -46,10 +45,3 @@ class SatelliteDataset(Dataset):
     
     def __len__(self) -> int:
         return len(self.db)
-    
-# if __name__ == "__main__":
-#     dataset = SatelliteDataset("datasets/maps/val")
-#     src, gt = dataset[0]
-#     print(f"Source image shape: {src.shape}")
-#     print(f"Groundtruth image shape: {gt.shape}")
-#     print(f"Dataset length: {len(dataset)}")
