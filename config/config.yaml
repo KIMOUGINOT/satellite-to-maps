@@ -1,3 +1,9 @@
 data:
   dataset: datasets/maps
   image_size: [256,256]
+  batch_size: 8
+
+train:
+  max_epochs: 150
+  use_gpu: true
+  output_dir: outputs/

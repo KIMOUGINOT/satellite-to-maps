@@ -1,3 +1,5 @@
+from PIL import Image
+from torchvision import transforms
 from torch.utils.data import Dataset
 import os
 from tqdm import tqdm
@@ -8,8 +10,14 @@ class SatelliteDataset(Dataset):
         self.dataset_path = dataset_path
         self.source_path = os.path.join(self.dataset_path, source_dir) 
         self.groundtruth_path = os.path.join(self.dataset_path, groundtruth_dir) 
-        self.image_size = image_size
+        self.image_size = (image_size[0], image_size[1])
         self.db = self._build_db()
+        self.transform = transforms.Compose([
+            transforms.Resize((self.image_size[0], self.image_size[1])),
+            transforms.ToTensor(),                      # uint8→float32 [0,1]
+            transforms.Normalize((0.5,0.5,0.5),         # → [–1,1]
+                                 (0.5,0.5,0.5)),
+        ])
 
     def _build_db(self) -> list:
         print(f"[INFO] Building dataset from {self.dataset_path} ...")
@@ -31,17 +39,13 @@ class SatelliteDataset(Dataset):
     def __getitem__(self, index):
         sample = self.db[index]
 
-        source = cv2.imread(sample['source'])
-        if source is None:
-            raise FileNotFoundError(f"Image not found: {sample['source']}")
-        source = cv2.resize(source, self.image_size, interpolation=cv2.INTER_LINEAR)
+        source = Image.open(sample['source']).convert('RGB')
+        source = self.transform(source)
 
-        groundtruth = cv2.imread(sample['groundtruth'])
-        if groundtruth is None:
-            raise FileNotFoundError(f"Image not found: {sample['groundtruth']}")
-        groundtruth = cv2.resize(groundtruth, self.image_size, interpolation=cv2.INTER_LINEAR)
+        target = Image.open(sample['groundtruth']).convert('RGB')
+        target = self.transform(target)
 
-        return source, groundtruth
+        return source, target
     
     def __len__(self) -> int:
         return len(self.db)
