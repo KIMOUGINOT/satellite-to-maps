@@ -14,8 +14,8 @@ class SatelliteDataset(Dataset):
         self.db = self._build_db()
         self.transform = transforms.Compose([
             transforms.Resize((self.image_size[0], self.image_size[1])),
-            transforms.ToTensor(),                      # uint8→float32 [0,1]
-            transforms.Normalize((0.5,0.5,0.5),         # → [–1,1]
+            transforms.ToTensor(),         
+            transforms.Normalize((0.5,0.5,0.5),
                                  (0.5,0.5,0.5)),
         ])
 

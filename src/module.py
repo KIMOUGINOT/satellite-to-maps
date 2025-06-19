@@ -56,13 +56,13 @@ class Pix2PixLightning(pl.LightningModule):
         # Train Discriminator
         # ---------------------
         opt_d.zero_grad()
-        # Real loss
+
         d_real = self.discriminator(src, tgt)
         loss_real = F.binary_cross_entropy(d_real, torch.ones_like(d_real))
-        # Fake loss
+
         d_fake = self.discriminator(src, fake.detach())
         loss_fake = F.binary_cross_entropy(d_fake, torch.zeros_like(d_fake))
-        # Total D loss
+
         d_loss = 0.5 * (loss_real + loss_fake)
         self.manual_backward(d_loss)
         opt_d.step()

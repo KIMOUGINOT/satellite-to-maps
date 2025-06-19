@@ -43,8 +43,8 @@ class SatelliteDataModule(LightningDataModule):
             pin_memory=True
         )
     
-if __name__ == "__main__":
-    from omegaconf import OmegaConf
+# if __name__ == "__main__":
+#     from omegaconf import OmegaConf
 
-    cfg = OmegaConf.load("config/config.yaml")
-    datamodule = SatelliteDataModule(cfg.data)
+#     cfg = OmegaConf.load("config/config.yaml")
+#     datamodule = SatelliteDataModule(cfg.data)
